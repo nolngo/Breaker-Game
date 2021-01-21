@@ -24,6 +24,7 @@
     var ballRadius = 10;
     
     var blue = "#0095DD"
+    var font = "16px Arial"
 
     var paddleHeight = 10;
     var paddleWidth = 75;
@@ -98,13 +99,13 @@
     }
 
     function drawScore() {
-        ctx.font = "16px Arial";
+        ctx.font = font;
         ctx.fillStyle = blue;
         ctx.fillText("Score: " +score, 8, 20)
     }
 
     function drawLives() {
-        ctx.font = "16px Arial";
+        ctx.font = font;
         ctx.fillStyle = blue;
         ctx.fillText("Lives: "+lives, canvas.width-65, 20)
     }
@@ -119,7 +120,7 @@
 
     function drawPaddle() {
         ctx.beginPath();
-        ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
+        ctx.rect(paddleX, canvas.height-paddleHeight-10, paddleWidth, paddleHeight);
         ctx.fillStyle = blue;
         ctx.fill();
         ctx.closePath();
@@ -154,7 +155,7 @@
 
         if(y + dy < ballRadius) {
             dy = -dy;
-        } else if(y + dy > canvas.height-ballRadius) {
+        } else if(y + dy > canvas.height-ballRadius-10) {
             if(x > paddleX && x < paddleX + paddleWidth) {
                 dy = -dy;
             }
