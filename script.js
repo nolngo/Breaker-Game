@@ -7,7 +7,7 @@ class Ball {
     this.x = argx;
     this.y = argy;
     this.dx = 2;
-    this.dy = 2;
+    this.dy = -2;
   }
   // this method draws the ball
 
@@ -113,8 +113,8 @@ const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
 // INITIALIZATIONS
-const ball1 = new Ball(50, 50);
-const ball2 = new Ball(100, 50);
+const ball1 = new Ball(250, 300);
+const ball2 = new Ball(200, 300);
 const paddle = new Paddle(canvas);
 
 // BRICK VALUES
