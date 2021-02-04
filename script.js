@@ -1,11 +1,11 @@
 /* eslint-disable max-classes-per-file */
 // CLASSES
 class Ball {
-  constructor() {
+  constructor(argx, argy) {
     this.ballRadius = 10;
     this.color = '#0095DD';
-    this.x = 250;
-    this.y = 160;
+    this.x = argx;
+    this.y = argy;
     this.dx = 2;
     this.dy = 2;
   }
@@ -84,9 +84,14 @@ class Paddle {
   }
 
   drawPaddle(canvas, ctx, rightPressed, leftPressed) {
-    if (rightPressed && this.x < canvas.width - this.width) {
+    if (this.x > (canvas.width - this.width)) {
+      this.x = canvas.width - this.width;
+    } else if (rightPressed) {
       this.x -= 7;
-    } else if (leftPressed && this.x > 0) {
+    }
+    if (this.x < 0) {
+      this.x = 0;
+    } else if (leftPressed) {
       this.x += 7;
     }
     ctx.beginPath();
@@ -97,12 +102,20 @@ class Paddle {
   }
 }
 
+class Lives {
+  constructor(canvas) {
+    this.lives = 3;
+  }
+}
+
 // CONSTANTS
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
 // INITIALIZATIONS
-const ball1 = new Ball();
+const ball1 = new Ball(50, 50);
+const ball2 = new Ball(100, 50);
+const paddle = new Paddle(canvas);
 
 // BRICK VALUES
 const brickRowCount = 5;
@@ -122,7 +135,6 @@ for (let c = 0; c < brickColumnCount; c += 1) {
     bricks[c][r] = new Brick(brickX, brickY, 1);
   }
 }
-const paddle = new Paddle(canvas);
 
 // EVENT HANDLERS AND EVENT LISTENERS
 let rightPressed = false;
@@ -153,6 +165,9 @@ function renderObjectsOnCanvas() {
   // generate ball and move it
   ball1.drawBall(ctx);
   ball1.move(canvas);
+  ball2.drawBall(ctx);
+  ball2.move(canvas);
+
   // we need to draw each brick, every frame!
   for (let c = 0; c < brickColumnCount; c += 1) {
     for (let r = 0; r < brickRowCount; r += 1) {
@@ -161,6 +176,7 @@ function renderObjectsOnCanvas() {
         bricks[c][r].drawBrick(ctx);
         // detect collision of ball during drawing!
         bricks[c][r].detectCollision(ball1);
+        bricks[c][r].detectCollision(ball2);
       }
     }
   }
@@ -168,5 +184,6 @@ function renderObjectsOnCanvas() {
   paddle.drawPaddle(canvas, ctx, leftPressed, rightPressed);
   // confirm loss state
   ball1.determineLoss(canvas, paddle);
+  ball2.determineLoss(canvas, paddle);
 }
 setInterval(renderObjectsOnCanvas, 10);
