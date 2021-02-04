@@ -1,9 +1,22 @@
 /* eslint-disable max-classes-per-file */
 // CLASSES
+class Background {
+  constructor() {
+    this.color = 'black';
+  }
+
+  render(ctx, canvas) {
+    ctx.beginPath();
+    ctx.fillStyle = this.color;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.closePath();
+  }
+}
+
 class Ball {
   constructor(argx, argy) {
     this.ballRadius = 10;
-    this.color = '#0095DD';
+    this.color = 'red';
     this.x = argx;
     this.y = argy;
     this.dx = 2;
@@ -103,8 +116,26 @@ class Paddle {
 }
 
 class Lives {
-  constructor(canvas) {
+  constructor() {
     this.lives = 3;
+  }
+
+  drawLives(ctx, canvas) {
+    ctx.font = '16px Arial';
+    ctx.fillstyle = 'red';
+    ctx.fillText(`Lives: ${this.lives}`, canvas.width - 65, 20);
+  }
+}
+
+class Score {
+  constructor() {
+    this.score = 0;
+  }
+
+  drawScore(ctx) {
+    ctx.font = '16px Arial';
+    ctx.fillstyle = 'red';
+    ctx.fillText(`Score: ${this.score}`, 20, 20);
   }
 }
 
@@ -113,9 +144,12 @@ const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
 // INITIALIZATIONS
+const background = new Background();
 const ball1 = new Ball(250, 300);
 const ball2 = new Ball(200, 300);
 const paddle = new Paddle(canvas);
+const lives = new Lives();
+const score = new Score();
 
 // BRICK VALUES
 const brickRowCount = 5;
@@ -161,6 +195,7 @@ document.addEventListener('keyup', keyUpHandler, false);
 
 // this generates the canvas and draws all the class objects onto it
 function renderObjectsOnCanvas() {
+  background.render(ctx, canvas);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   // generate ball and move it
   ball1.drawBall(ctx);
@@ -180,6 +215,9 @@ function renderObjectsOnCanvas() {
       }
     }
   }
+
+  score.drawScore(ctx);
+  lives.drawLives(ctx, canvas);
   // update paddle position
   paddle.drawPaddle(canvas, ctx, leftPressed, rightPressed);
   // confirm loss state
